@@ -91,7 +91,7 @@ output "rg_name" {
 }
 ```
 
-![main.tf](C:\Users\user\Downloads\PRAVIN MISHRA PICS\WEEK 7\1AS2.png)
+![main.tf](assets/images/1AS2.png)
 
 
 **Execution:**
@@ -100,11 +100,11 @@ output "rg_name" {
 2.  `terraform plan`
 3.  `terraform apply`
 
-![terraform apply](C:\Users\user\Downloads\PRAVIN MISHRA PICS\WEEK 7\1AS5.png)
+![terraform apply](assets/images/1AS5.png)
 
-![terraform apply2](C:\Users\user\Downloads\PRAVIN MISHRA PICS\WEEK 7\1AS6.png)
+![terraform apply2](assets/images/1AS6.png)
 
-![resource groups](C:\Users\user\Downloads\PRAVIN MISHRA PICS\WEEK 7\1AS7.png)
+![resource groups](assets/images/1AS7.png)
 
 The resource group was successfully created using the Service Principal credentials.
 
@@ -120,7 +120,7 @@ Service Principal secrets have an expiration. To rotate a secret (create a new p
 az ad sp credential reset --name "terraform-sp" --years 1
 ```
 
-![secret rotation](C:\Users\user\Downloads\PRAVIN MISHRA PICS\WEEK 7\1AS9.png)
+![secret rotation](assets/images/1AS9.png)
 
 
 ### Secrets Management
