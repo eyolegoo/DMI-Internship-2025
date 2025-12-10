@@ -66,7 +66,7 @@ To ensure Terraform was using the Service Principal and not my personal account,
 az logout
 ```
 
-![az logout]("C:\Users\user\Downloads\PRAVIN MISHRA PICS\WEEK 7\1AS3.png")
+![az logout]("C:\Users\user\Downloads\PRAVIN MISHRA PICS\WEEK 7\1AS2.png")
 
 
 ### Step 5: Provision Infrastructure
