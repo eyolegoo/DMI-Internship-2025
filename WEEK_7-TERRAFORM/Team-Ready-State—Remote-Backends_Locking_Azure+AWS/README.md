@@ -352,6 +352,3 @@ aws dynamodb delete-table --table-name terraform_state_lock
 I was surprised to learn that Terraform backends and providers do totally different things — providers take care of resources, while backends just manage state storage and locking.
 It’s best to keep backend keys organized by environment, like `envs/dev/terraform.tfstate` and so on. One thing to take note of is creating the backend inside the same project that uses it — Terraform won’t initialize without an existing backend. Meaning, always create the backend first.
 Also, always enable state locking to avoid conflicts. Fun fact: Azure clears stale locks automatically, but on AWS, you’ll need to remove them manually in DynamoDB.
-
-```
-```
