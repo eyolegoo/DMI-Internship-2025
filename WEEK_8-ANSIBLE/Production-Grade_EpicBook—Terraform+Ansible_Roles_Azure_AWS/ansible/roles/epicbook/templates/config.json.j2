@@ -1,0 +1,27 @@
+{
+  "development": {
+    "username": "{{ db_username }}",
+    "password": "{{ db_password }}",
+    "database": "{{ db_name }}",
+    "host": "{{ db_host }}",
+    "port": "{{ db_port | default('3306') }}",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "use_env_variable": "JAWSDB_URL",
+    "dialect": "mysql"
+  }
+}

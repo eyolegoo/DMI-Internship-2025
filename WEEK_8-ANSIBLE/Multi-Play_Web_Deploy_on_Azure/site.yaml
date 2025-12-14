@@ -1,0 +1,41 @@
+---
+- name: Install web server packages
+  hosts: web
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Ensure nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+- name: Deploy static index.html
+  hosts: web
+  become: yes
+  tasks:
+    - name: Copy index.html to web root
+      copy:
+        src: files/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Verify deployment via URI
+      uri:
+        url: "http://{{ ansible_host }}"
+        return_content: yes
+      register: webpage
+
+    - name: Show webpage content
+      debug:
+        var: webpage.content

@@ -1,0 +1,12 @@
+---
+epicbook_repo: "https://github.com/eyolegoo/theepicbook.git"
+app_dir: /var/www/epicbook
+app_port: 8080
+
+db_host: "epicbook-mysql-dev.mysql.database.azure.com"
+db_username: "devepicuser"
+db_password: "Youandme@12345"
+db_name: "bookstore"
+db_port: 3306
+
+nodejs_setup_script: "https://deb.nodesource.com/setup_lts.x"

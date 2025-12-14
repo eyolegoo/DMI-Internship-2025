@@ -1,0 +1,87 @@
+---
+- name: Ensure nodejs LTS repository script is present
+  shell: curl -fsSL {{ nodejs_setup_script }} | bash -
+  args:
+    creates: /etc/apt/sources.list.d/nodesource.list
+
+- name: Install nodejs (LTS)
+  apt:
+    name: nodejs
+    state: present
+    update_cache: yes
+
+- name: Ensure application directory exists
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Mark /var/www/epicbook as safe for Git
+  ansible.builtin.command: git config --global --add safe.directory /var/www/epicbook
+  become: true
+  
+- name: Clone EpicBook repository
+  git:
+    repo: "{{ epicbook_repo }}"
+    dest: "{{ app_dir }}"
+    version: HEAD
+    force: yes
+    update: yes
+  notify: Restart epicbook
+
+- name: Install npm dependencies
+  npm:
+    path: "{{ app_dir }}"
+    production: no
+    ignore_scripts: no
+  register: npm_install
+  notify: Restart epicbook
+
+- name: Provide config.json from template
+  template:
+    src: config.json.j2
+    dest: "{{ app_dir }}/config/config.json"
+    owner: www-data
+    group: www-data
+    mode: '0640'
+  notify: Restart epicbook
+
+- name: Ensure build step (if any) - run npm run build if package.json has build script
+  shell: |
+    if grep -q "\"build\":" {{ app_dir }}/package.json; then
+      cd {{ app_dir }} && npm run build
+    fi
+  args:
+    chdir: "{{ app_dir }}"
+  register: build_result
+  changed_when: "'npm run build' in build_result.stdout or build_result.rc == 0"
+
+- name: Create systemd service for epicbook
+  copy:
+    dest: /etc/systemd/system/epicbook.service
+    content: |
+      [Unit]
+      Description=EpicBook Node App
+      After=network.target
+
+      [Service]
+      Environment=NODE_ENV=production
+      WorkingDirectory={{ app_dir }}
+      ExecStart=/usr/bin/node {{ app_dir }}/server.js
+      Restart=always
+      User=www-data
+      Group=www-data
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+  notify: Reload systemd
+
+- name: Ensure epicbook service is enabled and started
+  systemd:
+    name: epicbook.service
+    state: started
+    enabled: yes
+

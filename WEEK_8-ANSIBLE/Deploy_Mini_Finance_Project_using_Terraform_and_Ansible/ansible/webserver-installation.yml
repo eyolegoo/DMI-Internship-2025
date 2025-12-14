@@ -1,0 +1,67 @@
+---
+- name: Install and Start Nginx Web Server
+  hosts: web
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Start and Enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+- name: Deploy Mini Finance Website
+  hosts: web
+  become: yes
+  tasks:
+    - name: Clone the Mini Finance project from GitHub
+      git:
+        repo: "https://github.com/eyolegoo/mini_finance.git"
+        dest: "/tmp/mini_finance"
+
+    - name: Copy website content to web server root
+      copy:
+        src: "/tmp/mini_finance/"
+        dest: "/var/www/html/"
+        owner: www-data
+        group: www-data
+        mode: "0755"
+        remote_src: yes
+
+- name: Configure Nginx to Serve the Site
+  hosts: web
+  become: yes
+  tasks:
+    - name: Overwrite default Nginx site configuration
+      copy:
+        dest: /etc/nginx/sites-available/default
+        content: |
+          server {
+              listen 80;
+              server_name _;
+              root /var/www/html;
+              index index.html;
+
+              location / {
+                  try_files $uri /index.html;
+              }
+
+              error_page 404 /index.html;
+          }
+        owner: root
+        group: root
+        mode: "0644"
+
+- name: Restart Nginx After Configuration
+  hosts: web
+  become: yes
+  tasks:
+    - name: Restart Nginx to apply changes
+      service:
+        name: nginx
+        state: restarted

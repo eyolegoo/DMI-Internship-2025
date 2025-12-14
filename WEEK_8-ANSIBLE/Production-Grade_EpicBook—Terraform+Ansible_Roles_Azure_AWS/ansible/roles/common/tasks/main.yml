@@ -1,0 +1,45 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Upgrade all packages (safe)
+  apt:
+    upgrade: dist
+  register: upgrade_result
+  changed_when: upgrade_result.changed
+
+- name: Ensure essential packages are present
+  apt:
+    name:
+      - git
+      - curl
+      - build-essential
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+      - gnupg
+      - mysql-client
+    state: present
+    update_cache: yes
+
+- name: Ensure UFW installed
+  apt:
+    name: ufw
+    state: present
+
+- name: Allow SSH (22) and HTTP (80) through UFW, then enable (non-interactive)
+  ansible.builtin.ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop:
+    - { port: 22, proto: tcp }
+    - { port: 80, proto: tcp }
+
+- name: Enable UFW firewall (force yes)
+  ansible.builtin.ufw:
+    state: enabled
+    direction: incoming
+    policy: allow
