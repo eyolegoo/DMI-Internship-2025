@@ -1,0 +1,45 @@
+trigger:
+  - main
+
+pool:
+  name: "linux-selfhosted-agent"
+
+variables:
+  sshService: 'ubuntu-nginx-ssh'
+  webRoot: '/var/www/html'
+
+stages:
+  - stage: DeployHTML
+    displayName: 'Deploy HTML Page to Azure VM'
+    jobs:
+      - job: Deploy
+        displayName: 'Copy index.html to NGINX web root'
+        steps:
+          - checkout: self
+
+          - task: SSH@0
+            inputs:
+              sshEndpoint: '$(sshService)'
+              runOptions: 'inline'
+              inline: |
+                sudo usermod -aG www-data $(whoami)
+                sudo chown -R www-data:www-data /var/www/html
+                sudo chmod -R 775 /var/www/html
+            displayName: 'Set secure permissions for web root'
+
+          - task: CopyFilesOverSSH@0
+            inputs:
+              sshEndpoint: '$(sshService)'
+              sourceFolder: '$(Build.SourcesDirectory)'
+              contents: 'index.html'
+              targetFolder: '$(webRoot)'
+            displayName: 'Copy index.html to VM'
+
+          - task: SSH@0
+            inputs:
+              sshEndpoint: '$(sshService)'
+              runOptions: 'inline'
+              inline: |
+                echo "Restarting NGINX..."
+                sudo systemctl restart nginx
+            displayName: 'Restart NGINX on VM'
