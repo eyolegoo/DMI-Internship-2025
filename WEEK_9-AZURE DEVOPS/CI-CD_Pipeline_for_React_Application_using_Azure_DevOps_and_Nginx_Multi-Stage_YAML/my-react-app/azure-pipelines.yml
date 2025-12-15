@@ -1,0 +1,145 @@
+trigger:
+  - main
+
+pool:
+  name: 'linux-self-agent'
+
+variables:
+  sshService: 'ssh-to-ubuntu-nginx'
+  artifactName: 'react-build'
+  webRoot: '/var/www/html'
+
+stages:
+  # Stage 1 — Build
+  - stage: Build
+    displayName: 'Build React App'
+    jobs:
+      - job: Build
+        steps:
+          - checkout: self
+
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js'
+
+          - script: npm ci
+            displayName: 'Install Dependencies'
+
+          - script: npm run build
+            displayName: 'Build React App'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: 'build'
+              artifactName: '$(artifactName)'
+            displayName: 'Publish Build Output'
+
+  # Stage 2 — Test
+  - stage: Test
+    displayName: 'Run Unit Tests'
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: Test
+        steps:
+          - checkout: self
+
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js'
+
+          - script: npm ci
+            displayName: 'Install Dependencies'
+
+          - script: npm test -- --watchAll=false
+            displayName: 'Run Jest Tests'
+
+  # Stage 3 — Publish
+  - stage: Publish
+    displayName: 'Publish Artifact for Deployment'
+    dependsOn: Test
+    condition: succeeded()
+    jobs:
+      - job: Publish
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              artifactName: '$(artifactName)'
+              downloadPath: '$(Pipeline.Workspace)/publish'
+            displayName: 'Download Build Artifact'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Pipeline.Workspace)/publish'
+              artifactName: '$(artifactName)-deploy'
+            displayName: 'Publish Final Artifact'
+
+  # Stage 4 — Deploy
+  - stage: Deploy
+    displayName: 'Deploy to NGINX Server'
+    dependsOn: Publish
+    condition: succeeded()
+    jobs:
+      - job: Deploy
+        steps:
+          # 1️⃣ Download artifact
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              artifactName: '$(artifactName)-deploy'
+              downloadPath: '$(Pipeline.Workspace)'
+            displayName: 'Download Deployment Artifact'
+
+          # 2️⃣ Clean and prepare remote directory
+          - task: SSH@0
+            inputs:
+              sshEndpoint: '$(sshService)'
+              runOptions: 'inline'
+              inline: |
+                echo "🧹 Cleaning and preparing /var/www/html ..."
+                sudo rm -rf /var/www/html/*
+                sudo mkdir -p /var/www/html
+                sudo chown -R $USER:$USER /var/www/html
+                sudo chmod -R 755 /var/www/html
+            displayName: 'Prepare Remote Directory'
+
+          # 3️⃣ Copy contents of build folder directly into /var/www/html
+          - task: CopyFilesOverSSH@0
+            inputs:
+              sshEndpoint: '$(sshService)'
+              sourceFolder: '$(Pipeline.Workspace)/$(artifactName)-deploy/react-build'
+              contents: '**'
+              targetFolder: '$(webRoot)'
+            displayName: 'Copy Build Contents to Web Root'
+
+          # 4️⃣ Configure and reload NGINX cleanly
+          - task: SSH@0
+            inputs:
+              sshEndpoint: '$(sshService)'
+              runOptions: 'inline'
+              inline: |
+                echo "⚙️ Updating NGINX configuration..."
+                echo 'server {
+                    listen 80;
+                    server_name _;
+                    root /var/www/html;
+                    index index.html;
+
+                    location / {
+                        try_files $uri /index.html;
+                    }
+
+                    error_page 404 /index.html;
+                }' | sudo tee /etc/nginx/sites-available/default > /dev/null
+
+                echo "🧪 Testing NGINX configuration..."
+                if sudo nginx -t 2>&1 | grep -q 'syntax is ok'; then
+                  echo "✅ Configuration valid"
+                fi
+
+                sudo systemctl reload nginx
+                echo "🚀 NGINX reloaded successfully!"
+            displayName: 'Update and Reload NGINX'

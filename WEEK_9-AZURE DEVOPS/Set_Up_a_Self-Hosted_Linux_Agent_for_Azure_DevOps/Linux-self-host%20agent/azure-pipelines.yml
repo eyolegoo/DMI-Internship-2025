@@ -1,0 +1,16 @@
+trigger:
+- none
+
+pool:
+  name: 'linux-self-agent'
+
+jobs:
+- job: TestOnSelfHosted
+  displayName: "Run basic checks on self-hosted agent"
+  steps:
+  - script: uname -a
+    displayName: "Kernel info"
+  - script: whoami
+    displayName: "Whoami"
+  - script: df -h
+    displayName: "Disk usage"

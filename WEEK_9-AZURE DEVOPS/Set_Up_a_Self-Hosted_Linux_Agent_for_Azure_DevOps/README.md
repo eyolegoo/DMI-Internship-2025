@@ -83,9 +83,3 @@ jobs:
 One challenge I faced was the agent failing to come online due to blocked outbound HTTPS traffic. I resolved it by adjusting the VM’s firewall to allow port 443 access to Azure DevOps.
 
 To scale this setup in production, I’d use multiple agent pools, automate deployment with scripts, and isolate each application’s agents for better security and control.
-
-```
-
-### Next Step
-If you need help creating the specific Terraform or Ansible scripts mentioned in the prerequisites section for your repository, just let me know!
-```
