@@ -150,7 +150,7 @@ stages:
 ### Infrastructure Outputted data after a successful terraform apply:
 
 ```
-epic_book_public_ip = "20.28.46.137"`
+epic_book_public_ip = "20.28.46.137"
 mysql_fqdn = "epic-book-db-65v1ch.mysql.database.azure.com"
 
 ```
@@ -172,10 +172,13 @@ mysql_fqdn = "epic-book-db-65v1ch.mysql.database.azure.com"
 ![Infra repo and pipeline creation](assets/images/5AS2i.png)
 
 
-###Inventory ConfigurationI injected this value into the `inventory.ini` file and `group_vars/web.yml`:
+### Inventory Configuration: I injected this value into the `inventory.ini` file and `group_vars/web.yml`:
 
-* `epic_book_public_ip = "20.28.46.137"`
-* `mysql_fqdn = "epic-book-db-65v1ch.mysql.database.azure.com"`
+```
+epic_book_public_ip = "20.28.46.137"
+mysql_fqdn = "epic-book-db-65v1ch.mysql.database.azure.com"
+
+```
 
 ![Inventory and Variable Injection](assets/images/5AS9.png)
 ![Inventory and Variable Injection](assets/images/5AS10.png)
