@@ -147,12 +147,13 @@ stages:
 ![Terraform apply](assets/images/5AS8.png)
 
 
-###Infrastructure OutputsOutputted data after a successful terraform apply:
+### Infrastructure Outputted data after a successful terraform apply:
 
-* `epic_book_public_ip = "20.28.46.137"`
-* `mysql_fqdn = "epic-book-db-65v1ch.mysql.database.azure.com"`
+```
+epic_book_public_ip = "20.28.46.137"`
+mysql_fqdn = "epic-book-db-65v1ch.mysql.database.azure.com"
 
-![Screenshot: Terraform Apply Output showing IP and FQDN]
+```
 
 ---
 
