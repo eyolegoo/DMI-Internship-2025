@@ -4,11 +4,14 @@
 Learning to automate server setup with cloud-init and Docker is a game-changer for modern development. Instead of manually installing software every time you create a server, you write the instructions once, and your VM bootstraps itself automatically. This approach saves hours of repetitive work, eliminates human error, and mirrors how real production environments are deployed at scale.
 
 ### Objective
+
 Provision a cloud VM (AWS or Azure), bootstrap it with User Data / Custom Data to install Docker automatically, dockerize the sample static site, and serve it on `http://<VM_IP>:80/`.
 
 **App repo:** [https://github.com/eyolegoo/Azure-Static-Website](https://github.com/eyolegoo/Azure-Static-Website)
 
+
 ### What I Will Build:
+
 1. Linux VM (Ubuntu 22.04 recommended) on AWS or Azure
 2. Cloud-init (User Data / Custom Data) script that:
     - Installs Docker
