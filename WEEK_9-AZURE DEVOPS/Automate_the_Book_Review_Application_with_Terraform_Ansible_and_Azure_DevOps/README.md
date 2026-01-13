@@ -72,7 +72,7 @@ sudo apt update
 sudo apt install terraform
 
 terraform -version
-````
+```
 
 **2. Download AZ in linux**
 
