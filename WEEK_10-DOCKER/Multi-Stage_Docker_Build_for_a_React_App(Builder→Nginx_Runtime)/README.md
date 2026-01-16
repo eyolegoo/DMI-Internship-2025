@@ -152,12 +152,13 @@ Size Reduction = ((Single - Multi) / Single) × 100
 Example: ((1390MB - 53.9MB) / 1390MB) × 100 = 96.122%
 ```
 
-Analysis:
+**Analysis:**
 The multi-stage approach achieved a remarkable 96.122% size reduction, shrinking the image from 1.39GB to just 53.9MB by keeping build tools separate from production runtime. This dramatically improves security by removing Node.js and npm from the final container, leaving only Nginx and static files—minimizing potential attack vectors. Additionally, copying dependency files before source code enables Docker's layer caching, cutting rebuild times from minutes to seconds when only application code changes. These optimizations make deployments faster, safer, and more efficient.
 
-Step 3.1: Reflection
-Image Sizes: Single-stage was 1390MB while multi-stage came out to just 53.9MB — a 96.122% reduction. Separating build tools from runtime made a massive difference in deployment efficiency.
+### Step 3.1: Reflection
 
-Security Improvement: Removing Node.js and npm from the final image eliminates thousands of potential vulnerabilities. The lean runtime with only Nginx and static files provides minimal attack surface for hackers.
+**Image Sizes:** Single-stage was 1390MB while multi-stage came out to just 53.9MB — a 96.122% reduction. Separating build tools from runtime made a massive difference in deployment efficiency.
 
-Production Change: I'd add environment variables for configurable API endpoints without rebuilding. I'd also implement SSL certificates and security headers for encrypted, secure connections.
+**Security Improvement:** Removing Node.js and npm from the final image eliminates thousands of potential vulnerabilities. The lean runtime with only Nginx and static files provides minimal attack surface for hackers.
+
+**Production Change:** I'd add environment variables for configurable API endpoints without rebuilding. I'd also implement SSL certificates and security headers for encrypted, secure connections.
