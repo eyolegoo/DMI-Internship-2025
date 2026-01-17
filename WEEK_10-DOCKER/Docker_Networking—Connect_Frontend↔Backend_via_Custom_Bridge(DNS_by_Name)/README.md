@@ -170,8 +170,8 @@ rm -rf docker-frontend
 2.  Why you can’t use localhost between containers: Every container has its own localhost. It doesn’t point to other containers — only to itself. So trying to reach another service using localhost will always fail.
 
 3.  When you actually need to expose ports:
-   * You do need port mapping (the -p option) when something outside Docker, like your browser or host computer, needs to reach a container.
-   * You do not need port mapping when containers talk to each other on the same network — they communicate internally using their container names and internal ports.
+    * You do need port mapping (the -p option) when something outside Docker, like your browser or host computer, needs to reach a container.
+    * You do not need port mapping when containers talk to each other on the same network — they communicate internally using their container names and internal ports.
 
 **Reflection:**
 
