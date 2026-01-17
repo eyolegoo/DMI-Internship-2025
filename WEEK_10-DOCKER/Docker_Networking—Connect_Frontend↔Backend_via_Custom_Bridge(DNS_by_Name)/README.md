@@ -165,11 +165,11 @@ rm -rf docker-frontend
 
 **Concepts**
 
-- 1. Why containers can talk to each other by name: When you put containers on a user-defined Docker network, Docker gives them their own internal DNS. That DNS automatically knows each container’s name and IP. So if one container says “connect to backend,” Docker resolves the backend to its correct IP. No manual setup needed.
+1.  Why containers can talk to each other by name: When you put containers on a user-defined Docker network, Docker gives them their own internal DNS. That DNS automatically knows each container’s name and IP. So if one container says “connect to backend,” Docker resolves the backend to its correct IP. No manual setup needed.
 
-- 2. Why you can’t use localhost between containers: Every container has its own localhost. It doesn’t point to other containers — only to itself. So trying to reach another service using localhost will always fail.
+2.  Why you can’t use localhost between containers: Every container has its own localhost. It doesn’t point to other containers — only to itself. So trying to reach another service using localhost will always fail.
 
-- 3. When you actually need to expose ports:
+3.  When you actually need to expose ports:
 * You do need port mapping (the -p option) when something outside Docker, like your browser or host computer, needs to reach a container.
 * You do not need port mapping when containers talk to each other on the same network — they communicate internally using their container names and internal ports.
 
