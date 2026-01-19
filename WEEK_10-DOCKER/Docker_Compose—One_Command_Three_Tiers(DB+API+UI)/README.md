@@ -120,16 +120,15 @@ services:
       - frontend_net                                                                                                                       
     restart: unless-stopped
                                                                                                                                    
-  # ==================== NETWORKS ======================                                                             networks:                                                                                                                                                backend_net:                                                                                                                                                                                                                                                                   driver:bridge                                                                                                                                                                                                                                                                    
-    name:backend_net                                                                                                                                                                                                                                                                 
-  frontend_net:                                                                                                                                                                                                                                                                 
-    driver:bridge                                                                                                                                                                                                                                                                    
-    name: frontend_net                                                                                                                                                                
-# ==================== VOLUMES ====================                                                                                                                                                                                                                                     
-volumes:                                                                                                                                                                                                                                                                                  
-  db_data:                                                                                                                                                                                                                                                                          
-    driver: local                                                                                                                                                                                                                                                                   
-    name: db_data
+  # ==================== NETWORKS ======================
+  networks:
+   backend_net:
+    driver: bridge                                                                                                                                                                                                  name: backend_net                                                                   
+   frontend_net:                                                                                                                                                                                                     driver:bridge
+     name: frontend_net
+                                                                                                                                                             
+  # ==================== VOLUMES ====================
+  volumes:                                                                                                                                                                                                         db_data:                                                                                                                                                                                                         driver: local                                                                                                                                                                                                   name: db_data
 ```
 
 **backend/Dockerfile**
