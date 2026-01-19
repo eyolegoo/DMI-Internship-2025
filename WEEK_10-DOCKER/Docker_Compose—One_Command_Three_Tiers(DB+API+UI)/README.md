@@ -1,4 +1,6 @@
-# ASSIGNMENT 47 Report: Docker Compose — One Command, Three Tiers (DB + API + UI)
+# ASSIGNMENT 47 Report: 
+
+## Docker Compose — One Command, Three Tiers (DB + API + UI)
 
 Docker Compose solves a real problem developers face daily: managing multiple services without chaos. Instead of running 30+ Docker commands manually, Compose brings everything together in one file. This assignment teaches how companies actually deploy applications—with proper database connectivity, network security, data persistence, and dependency management. You'll learn why network segmentation protects against breaches, why health checks prevent startup failures, and why volumes keep data safe across restarts. This is how Netflix, Uber, and most tech companies run their applications locally and in production. Master this, and you've got a skill worth thousands.
 
