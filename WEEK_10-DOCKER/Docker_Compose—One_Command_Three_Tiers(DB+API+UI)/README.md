@@ -52,7 +52,7 @@ API_BASE_URL=http://backend:5000
 
 **docker-compose.yml**
 
-```YAML
+```Yaml
 version: '3.9'
 
 services:
@@ -114,21 +114,26 @@ services:
     environment:                                                                                                      
       UI_PORT: ${UI_PORT}                                                                                             
       API_BASE_URL: ${API_BASE_URL}                                                                                                                                                                                                                                                                                 
-    ports:                                                                                                             
-      - "${UI_PORT}:${UI_PORT}"                                                                                                            
-    networks:                                                                                                              
-      - frontend_net                                                                                                                       
-    restart: unless-stopped
-                                                                                                                                   
-  # ==================== NETWORKS ======================
-  networks:
-   backend_net:
-    driver: bridge                                                                                                                                                                                                  name: backend_net                                                                   
-   frontend_net:                                                                                                                                                                                                     driver:bridge
-     name: frontend_net
-                                                                                                                                                             
-  # ==================== VOLUMES ====================
-  volumes:                                                                                                                                                                                                         db_data:                                                                                                                                                                                                         driver: local                                                                                                                                                                                                   name: db_data
+    ports:                                                                                                                                                                                                                                                                  
+      - "${UI_PORT}:${UI_PORT}"                                                                                                                                                                                                                                                                 
+    networks:                                                                                                                                                                                                                                                                 
+      - frontend_net                                                                                                                                                                                                                                                                  
+    restart: unless-stopped                                                                                                                                                                                                                                                                 
+                                                                                                                                                                                                                                                                                          
+# ==================== NETWORKS ====================                                                                                                                                                                                                                                      
+networks:                                                                                                                                                                                                                                                                                 
+  backend_net:                                                                                                                                                                                                                                                                          
+    driver: bridge                                                                                                                                                                                                                                                                    
+    name: backend_net                                                                                                                                                                                                                                                                 
+  frontend_net:                                                                                                                                                                                                                                                                 
+    driver: bridge                                                                                                                                                                                                                                                                    
+    name: frontend_net                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                          
+# ==================== VOLUMES ====================                                                                                                                                                                                                                                     
+volumes:                                                                                                                                                                                                                                                                                  
+  db_data:                                                                                                                                                                                                                                                                          
+    driver: local                                                                                                                                                                                                                                                                   
+    name: db_data
 ```
 
 **backend/Dockerfile**
