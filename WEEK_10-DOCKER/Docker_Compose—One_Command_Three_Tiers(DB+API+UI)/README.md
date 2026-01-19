@@ -1,4 +1,4 @@
-# ASSIGNMENT 47 Report: 
+# ASSIGNMENT 47 Report
 
 ## Docker Compose — One Command, Three Tiers (DB + API + UI)
 
