@@ -14,9 +14,9 @@ Package and run the Book Review Application (Frontend + Backend + MySQL) using o
 
 **What To Build:**
 1. Three services in docker-compose.yml:
- * mysql: official image, persistent data volume, healthcheck
- * backend: builds from backend/ Dockerfile, reads DB env vars
- * frontend: builds from frontend/ Dockerfile, points to backend URL
+   * mysql: official image, persistent data volume, healthcheck
+   * backend: builds from backend/ Dockerfile, reads DB env vars
+   * frontend: builds from frontend/ Dockerfile, points to backend URL
 2. One named volume: mysql_data
 
 
